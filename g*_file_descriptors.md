@@ -1,3 +1,4 @@
+http://solarscience.msfc.nasa.gov/greenwch.shtml
 The data format in these files changes slightly at years 1977 and 1982.
 The format is given below.
 
