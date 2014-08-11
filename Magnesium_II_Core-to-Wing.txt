@@ -1,4 +1,4 @@
-time(Julian_Days),mg_index(core_to_wing_ratio)
+time,mg_index
 2450450.0,0.26437
 2450451.0,0.26418
 2450452.0,0.26476
