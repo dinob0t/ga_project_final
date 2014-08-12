@@ -1,4 +1,4 @@
- Date       Time     Central  Width  Linear   2nd_order_speed      Accel   MPA   Remark PA           Speed  initial final   20R                        
+Date Time Central_PA Width L_speed 2nd_o_speed 2nd_o_speed_20R Accel Mass KE MPA Comment1 Comment2 Comment3
 1996/01/11  00:14:36    267     18    499     571    426      0    -64.3*   -------    -------    272   Only C3
 1996/01/13  22:08:30    265     16    290     278    303    372      2.8*   -------    -------    266   Only C3
 1996/01/15  07:01:10    262     43    525     600    454      0    -31.1    -------    -------    272   Only C3
