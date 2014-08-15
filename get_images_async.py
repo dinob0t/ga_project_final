@@ -9,7 +9,7 @@ def generate_url_list(base_url, year):
   url_list = []
   file_list = []
   year_str = str(year)
-  for month in range(1,13):
+  for month in range(10,13):
     month_str = str(month)
     if month<10:
       month_str = '0'+ month_str
@@ -36,7 +36,7 @@ def save_to_file(img, file_name):
   # file_name = file_list[file_idx]
   print(type(file_name))
   print("printing file name: " + file_name)
-  f = open('./data/2010_256/' + file_name,'wb')
+  f = open('./data/all_256/' + file_name,'wb')
   f.write(img)
   f.close()
 
@@ -74,7 +74,7 @@ def process_batch_of_urls(urls, file_names):
 def process_all():
   print('### Started ###')
   start_time = time.time()
-  url_list, file_list = generate_url_list('http://jsoc.stanford.edu/data/hmi/images/', 2011)
+  url_list, file_list = generate_url_list('http://jsoc.stanford.edu/data/hmi/images/', 2012)
 
   url_chunks=[url_list[x:x+100] for x in range(0, len(url_list), 100)]
   file_chunks=[file_list[x:x+100] for x in range(0, len(file_list), 100)]
