@@ -5,29 +5,33 @@ import math
 import time
 import urllib.request
 
-def generate_url_list(base_url, year):
+def generate_url_list(base_url, year_start):
   url_list = []
   file_list = []
-  year_str = str(year)
-  for month in range(10,13):
-    month_str = str(month)
-    if month<10:
-      month_str = '0'+ month_str
+  for year in range(year_start,2014):
+    year_str = str(year)
+    month_start = 1
+    if year == 2010:
+      month_start = 5
+    for month in range(month_start,13):
+      month_str = str(month)
+      if month<10:
+        month_str = '0'+ month_str
 
-    for day in range(1,32):
-      day_str = str(day)
-      if day<10:
-        day_str = '0'+ day_str
+      for day in range(1,32):
+        day_str = str(day)
+        if day<10:
+          day_str = '0'+ day_str
 
-      for hour in range(0,24):
-        hour_str= str(hour)
-        if hour<10:
-          hour_str = '0'+ hour_str        
+        for hour in range(0,24):
+          hour_str= str(hour)
+          if hour<10:
+            hour_str = '0'+ hour_str        
 
-        for minute_str in ['0000', '1500', '3000', '4500']:
-          file_str = year_str + month_str + day_str + '_' + hour_str + minute_str + '_M_256.jpg'
-          file_list.append(file_str)
-          url_list.append(base_url + year_str + '/' + month_str + '/' + day_str + '/' +  file_str)
+          for minute_str in ['0000', '1500', '3000', '4500']:
+            file_str = year_str + month_str + day_str + '_' + hour_str + minute_str + '_M_256.jpg'
+            file_list.append(file_str)
+            url_list.append(base_url + year_str + '/' + month_str + '/' + day_str + '/' +  file_str)
   return url_list, file_list
 
 @asyncio.coroutine
@@ -74,10 +78,11 @@ def process_batch_of_urls(urls, file_names):
 def process_all():
   print('### Started ###')
   start_time = time.time()
-  url_list, file_list = generate_url_list('http://jsoc.stanford.edu/data/hmi/images/', 2012)
+  url_list, file_list = generate_url_list('http://jsoc.stanford.edu/data/hmi/images/', 2010)
 
-  url_chunks=[url_list[x:x+100] for x in range(0, len(url_list), 100)]
-  file_chunks=[file_list[x:x+100] for x in range(0, len(file_list), 100)]
+  pool_size = 200
+  url_chunks=[url_list[x:x+pool_size] for x in range(0, len(url_list), pool_size)]
+  file_chunks=[file_list[x:x+pool_size] for x in range(0, len(file_list), pool_size)]
 
   for urls, file_names in zip(url_chunks, file_chunks):
     yield from process_batch_of_urls(urls, file_names)
