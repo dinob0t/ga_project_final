@@ -29,14 +29,22 @@ Because of the strong association of CMEs and the solar magnetic field configura
 `cme_catalogue.md` - List of times and other attributes for all CMEs since 1997. Objective is to predict the number of CMEs in a given time interval.
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_cmes.png)
-
+(Fig 1: Mean CMEs per month grouped by year)
 ## Part 1 - Proxies for solar activity - analysis and prediction
 
 ### Known features that correlate with solar activity
 1. The number of sun spots
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_ssn_clip.png)
+(Fig 2: Mean CMEs per month grouped by year)
 2. The area of the solar disc covered by sun spots
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_ssa.png)
+(Fig 3: Mean CMEs per month grouped by year)
 3. The solar irradiance 
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_cmes.png)
+(Fig 4: Mean CMEs per month grouped by year)
 4. The solar radio flux
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_cmes.png)
+(Fig 5: Mean CMEs per month grouped by year)
 
 
 
