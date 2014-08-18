@@ -27,7 +27,7 @@ Because of the strong association of CMEs and the solar magnetic field configura
 
 ### Target
 `cme_catalogue.md` - List of times and other attributes for all CMEs since 1997. Objective is to predict the number of CMEs in a given time interval.
-![alt text][https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_cmes.png]
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_cmes.png)
 
 ## Part 1 - Proxies for solar activity - analysis and prediction
 
