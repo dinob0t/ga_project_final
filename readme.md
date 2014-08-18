@@ -9,23 +9,39 @@ Because of the strong association of CMEs and the solar magnetic field configura
 ## Project files
 ### Analysis
 `cmes.ipynb` - looks at the association of more qualitative sun activity measures on predicting CMEs.
+
 `magnetograms.ipynb` - uses vector magnetogram data from 2010-2013 to analyse solar activity and attempt to predict CMEs.
 
 ### Data
 `issn.md` - international sunspot number record.
+
 `daily_area.txt` - daily area of the sun covered in sunspots.
+
 `lyman_alpha.txt` - daily solar irradiance.
+
 `f10.7.txt` - daily radio flux.
+
 `g*.txt` - Greenwich sunspot grouping data (tracks groups of sunspots).
+
 `/data/all_256` - (Not included here) 3.4GB of vector magnetogram data from 2010-2013.
 
 ### Target
 `cme_catalogue.md` - List of times and other attributes for all CMEs since 1997. Objective is to predict the number of CMEs in a given time interval.
+![alt text][monthly_mean_cmes]
 
 ## Part 1 - Proxies for solar activity - analysis and prediction
 
+### Known features that correlate with solar activity
+1. The number of sun spots
+2. The area of the solar disc covered by sun spots
+3. The solar irradiance 
+4. The solar radio flux
+
+
 
 ## Part 2 - Vector magnetogram analysis
+
+
 
 Original dimensionality / all data / no time_since
 0.641176799121
