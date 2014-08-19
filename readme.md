@@ -155,12 +155,88 @@ MAPE test: 173.152010099
 
 ## Part 2 - Vector magnetogram analysis
 ### Summary
+Vector magnetograms directly image the magnetic field at the sun's chromosphere. Hopefully the magnetic configurations recorded by these images contains some information that can be used to predict the onset of a CME.  The HMI instrument as part of the launch of the Solar Dynamic Observatory records these magnetograms every 15 minutes. They are available in a variety of resolutions, the smallest being 256x256 pixels at this site: http://jsoc.stanford.edu/data/hmi/images/. 
+
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/jsoc_dirs-400.png) <br>
+(Fig 10: Directory structure of the hosted HMI vector magnetogram data.)
+
 
 ### Data scraping
+To recursively parse the directory structure and download images, `wget` can be a useful tool, i.e.
+`wget -r  -nd -N -np --tries=75 --no-clobber  --accept '*_M_256.jpg' http://jsoc.stanford.edu/data/hmi/images`
+While this works fine, it is very slow for a large number of files (order of 10 hours). One ugly strategy is to run the above command multiple times separated by the `&` symbol. Since each call won't overwrite an existing file, we now have multiple 'threads' each working on different parts of different directories. This now reduces the time to a few hours, but somehow some of the files are missed.
+
+A better solution is to use the `asyncio` library and Python 3. A list is generated which contains all the urls that we are interested in, and this list is chopped up into (200) multiple chunks. Each chunk is then processed asynchronously yielding all the files we expect in approximately 1 hour.
 
 ### Data preparation
+Initially we have 256x256=65536 pixels in our image that could potentially be features. The first thing to do is to create a mask which the pixels that selects only the solar disc and then flatten the array. This reduces the number of pixels to 42981. Each pixels is greyscale and therefore can take one of 256 values.
 
-### Dimensionality reduction - PCA
+The CME catalogue information in `cme_catalogue.md` is used to classify each image as either a '1' if the image timestamp indicates that it occurs directly before a CME, or a '0' otherwise. The images are only available from 2010-2013 and so we have 126144 images total, of which 2794 are 'pre-CME' frames with target set to '1'.
+
+An additional array the same dimension as the number of images 'time_since' is also calculated which records the number of frames since the last CME. In Part 1 of the project, information relating to previous CME activity turned out to be strong predictors of future CMEs.
+
+### Dimensionality reduction 1 - PCA
+Clearly the dimensionality is very large and we have limited target information. Either regularisation needs to be imposed or dimensionality reduction should be employed. Using something like Logistic Regression with a 'L1', or 'L2' regularisation penalty is not possible on a 126144x42981 array due to computational constraints.
+
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/pca_cum_var_explained_1000.png) <br>
+(Fig 11: Cumulative explained variance ratios for up to 1000 PCA components.)
+
+Figure 11 shows the total explained variance if we were to choose up to 1000 principal components. The strategy is normally to choose the number of components that corresponds to just after the steepest gradients on this curve i.e. around 100 components. However, the values on the y-axis show that we are only capturing a very small amount of the variance.
+
+Nonetheless, if we push on and reduce our dimensionality to now 126144x100 we can now at least attempt classification. The classifier used will be the Multinomial Naiive Bayes and the metric we are primarily interested in is the Area Under the Curve (AUC). The initial results are below:
+```
+R^2 train: 0.976806342016
+R^2 test: 0.976508825706
+             precision    recall  f1-score   support
+
+          0       0.98      1.00      0.99     86350
+          1       0.02      0.00      0.00      1950
+
+avg / total       0.96      0.98      0.97     88300
+
+             precision    recall  f1-score   support
+
+          0       0.98      1.00      0.99     37000
+          1       0.08      0.00      0.01       844
+
+avg / total       0.96      0.98      0.97     37844
+
+Area Under Curve train: 0.499933781717
+Area Under Curve test: 0.501707506084
+Area Under Curve average: 0.500820643901
+```
+An average AUC of 0.5 indicates that the classifier is no better than random chance. If we now add in the additional feature 'time_since' which records the number of frames since the last CME the classifier performs better than before but still poorly:
+```
+R^2 train: 0.659943374858
+R^2 test: 0.663169855195
+             precision    recall  f1-score   support
+
+          0       0.98      0.66      0.79     86353
+          1       0.03      0.48      0.06      1947
+
+avg / total       0.96      0.66      0.78     88300
+
+             precision    recall  f1-score   support
+
+          0       0.98      0.67      0.79     36997
+          1       0.03      0.46      0.06       847
+
+avg / total       0.96      0.66      0.78     37844
+
+Area Under Curve train: 0.569851588204
+Area Under Curve test: 0.561822556275
+Area Under Curve average: 0.56583707224
+```
+
+### Discussion
+The improvement in the classifier is almost entirely due to the 'time_since' feature. Whilst there is no guarantee that we would have done better if the original dimensionality was somehow all retained, it appears that the PCA was ineffective. This is due to the small amount of variance that is explained by our 100 components as in Fig 11. It appears that there is just too much variance in the base features of the sun over several years of data in order to reduce it to a subset of principal components. For example, if we attempted to reduce only one solar rotation (~27 days) to 100 components, we capture much more of the variance (Fig 12).
+
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/pca_cum_var_explained_1000_single_month.png) <br>
+(Fig 12: Cumulative explained variance ratios for up to 1000 PCA components for one solar rotation only.)
+
+
+
+
 
 ### Dimensionality reduction - PCA
 
@@ -168,7 +244,7 @@ MAPE test: 173.152010099
 
 ### Target
 
-### Classifier
+
 
 ### Results
 
