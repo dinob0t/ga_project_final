@@ -2,15 +2,15 @@
 
 ## Summary
 
-An coronal mass ejection (CME) is an energetic event in which the sun ejects a large body of plasma along with a frozen in magnetic field configuration into the solar wind. A so called 'halo' event occurs when this ejection appears primarily along the Earth-Sun field of view. It is these events in particular which pose risk to Earth because of the strong association with space weather and geomagnetic storms arising from the CME's magnetic interaction with the Earth's magnetic field. This poses problems for astronauts, satellites, high frequency communications, and may induce currents in any long conductors near the Earth's poles (pipelines, powerlines etc.) It is clearly of interest to understand and predict these events.
+A coronal mass ejection (CME) is an energetic event in which the sun ejects a large body of plasma along with a frozen in magnetic field configuration into the solar wind. A so called 'halo' event occurs when this ejection appears primarily along the earth-sun field of view. It is these events in particular which pose risk to earth because of the strong association with space weather and geomagnetic storms arising from the CME's magnetic interaction with the Earth's magnetic field. This poses problems for astronauts, satellites, high frequency communications, and may induce currents in any long conductors near the earth's poles (pipelines, powerlines etc.) It is clearly of interest to understand and predict these events.
 
-Because of the strong association of CMEs and the solar magnetic field configuration, a natural place to start looking at predictors is the sun spot cycle (sun spots occur because the twisted magnetic configurations inhibit heat convection and hence the plasma cools appearing dark, especially in hydrogen-alpha line images of the sun). Excellent data on sun spot numbers exists as far back as the 1800s, and more recently the latitude and longitude of sun spot areas on the sun is documented daily. Other indicators of solar activity include the solar irradiance or radio flux (akin to the power output of the sun) which can be observed at the Lyman Alpha line or 10.7cm Hydrogen line, respectively.  Even better are the vector magnetograms that directly image the magnetic field configuration on the sun's surface for which we have images produced every 15 minutes since 2010. Furthermore to train our classifiers we have the LASCO catalogue of CMEs which has documented every (observerable/detectable) CME since 1997.
+Because of the strong association of CMEs and the solar magnetic field configuration, a natural place to start looking at predictors is the sun spot cycle (sun spots occur because the twisted magnetic configurations inhibit heat convection and hence the plasma cools appearing dark, especially in hydrogen-alpha line images of the sun). Excellent data on sun spot numbers exists as far back as the 1800s, and more recently the latitude and longitude of sun spot areas on the sun is documented daily. Other indicators of solar activity include the solar irradiance or radio flux (akin to the power output of the sun) which can be observed at the Lyman Alpha line or 10.7cm Hydrogen line, respectively.  Even better are the vector magnetograms that directly image the magnetic field configuration on the sun's surface for which we have images produced every 15 minutes since 2010. Furthermore, to train our classifiers we have the LASCO catalogue of CMEs which has documented every (observerable/detectable) CME since 1997.
 
 ## Project files
 ### Analysis
-`cmes.ipynb` - looks at the association of more qualitative sun activity measures on predicting CMEs.
+`cmes.ipynb` - looks at the association of more qualitative sun activity measures on predicting CMEs on time scales of days to a month.
 
-`magnetograms.ipynb` - uses vector magnetogram data from 2010-2013 to analyse solar activity and attempt to predict CMEs.
+`magnetograms.ipynb` - uses vector magnetogram data from 2010-2013 to analyse solar activity and attempt to predict CMEs on time scales of 15-30 mins.
 
 ### Feature data
 `issn.md` - international sunspot number record.
@@ -34,22 +34,22 @@ Because of the strong association of CMEs and the solar magnetic field configura
 ## Part 1 - Proxies for solar activity - analysis and prediction
 
 ### Known features that correlate with solar activity
-1. The number of sun spots
+- The number of sun spots
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_ssn_clip.png)<br>
 (Fig 2: Mean CMEs per month grouped by year)
 
-2. The area of the solar disc covered by sun spots
+- The area of the solar disc covered by sun spots
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_ssa.png)<br>
 (Fig 3: Mean area of solar disc covered per month grouped by year)
 
-3. The solar irradiance 
+- The solar irradiance 
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_lyman.png)<br>
 (Fig 4: Mean solar irradiance grouped by year)
 
-4. The solar radio flux
+- The solar radio flux
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_10.7.png)<br>
 (Fig 5: Mean F10.7 radio emission by year)
@@ -62,26 +62,27 @@ The Greenwich sunspot grouping data tracks information about any number of sunsp
 
 ### Lagging previous CME information
 
-The information required to predict the number of CMEs on a particular day is likely to be related to CME activity on the day before. Therefore a number of CME parameters such as size, velocity, onset hour etc., are lagged by one day and added as additional features. In the case that there are multiple CMEs the day before then the average values of the features is used.
+The information required to predict the number of CMEs on a particular day is likely to be related to CME activity on the day before. Therefore a number of CME parameters such as size, velocity, onset hour, etc., are lagged by one day and added as additional features. In the case that there are multiple CMEs the day before then the average values of the features is used.
 
 ### Attempted target
 
-1. Predict the number of CMEs tomorrow based on the information for today. Fig 6 shows 
+1) Predict the number of CMEs tomorrow based on the information for today. Fig 6 shows the relationship between sunspots and CMEs on a daily basis. They do not appear to be strongly correlated. 
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/correlation_cme_ssn_daily.png)<br>
-(Fig 6: Showing correlation between sunspot number and cme number per day)
+(Fig 6: Showing correlation between sunspot number and CME number per day)
 
-2. Predict the number of CMEs next month based on the information for this month (1 month is approximately 1 solar cycle)
-![alt text](https://github.com/dinob0t/ga_project_final/blob/master/correlation_cme_ssn_monthly.png)</br><br>
-(Fig 7: Showing correlation between sunspot number and cme number per month))
+2) Predict the number of CMEs next month based on the information for this month (1 month is approximately 1 solar cycle). Fig 7 shows the relationship between sunspots and CMEs on a monthly basis. There is a better correlation over the course of a month compared to per day.
+
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/correlation_cme_ssn_monthly.png)<br>
+(Fig 7: Showing correlation between sunspot number and CME number per month))
 
 ### Classifiers
 
-1. Random Forest for attempted target 1, as the number of categories representing the number of CMEs on any given day is limited to about 10
-2. Linear Model Regression for attempted target 2, as there are a large number of CMEs occurring over the course of a month 
+1) Random Forest for attempted target 1 (above), as the number of categories representing the number of CMEs on any given day is limited to around 10.
+2) Linear Model Regression for attempted target 2 (above), as there are a large number of CMEs occurring over the course of a month.
 
 ## Results
-1. Random Forest - predicting for a day
+1) Random Forest - predicting for each day.
 ```
 R^2 train: 0.340327415264
 R^2 test: 0.32688172043
@@ -140,7 +141,7 @@ Feature Importance
 (Fig 8: Sunspots vs CME numbers per day (blue - data, red - predicted))
 
 
-2. Ridge Regression (2nd degree polynomial)- predicting for a month
+2) Ridge Regression (2nd degree polynomial)- predicting for a month
 ```
 R^2 train: 0.653400997278
 R^2 test: 0.507888792648
@@ -155,15 +156,12 @@ The ability of the Random Forest to predict the number of CMEs the next day is p
 
 The ability of the Ridge Regressor to predict the monthly CME number is better than the day to day prediction above. Unfortunately the R^2 and MAPE values of the test and training sets indicates an over-fitting problem which can not be easily rectified. Because the data is now grouped by month, there is only 203 rows representing the data from 1997-2013. This makes the regularisation of the Ridge Regressor essential, but there simply isn't enough data yet to do much better.
 
-
-
 ## Part 2 - Vector magnetogram analysis
 ### Summary
-Vector magnetograms directly image the magnetic field at the sun's chromosphere. Hopefully the magnetic configurations recorded by these images contains some information that can be used to predict the onset of a CME.  The HMI instrument as part of the launch of the Solar Dynamic Observatory records these magnetograms every 15 minutes. They are available in a variety of resolutions, the smallest being 256x256 pixels at this site: http://jsoc.stanford.edu/data/hmi/images/. 
+Vector magnetograms directly image the magnetic field at the sun's chromosphere. The hope is that the magnetic configurations recorded by these images contains some information that can be used to predict the onset of a CME.  The HMI instrument as part of the launch of the Solar Dynamic Observatory records these magnetograms every 15 minutes. They are available in a variety of resolutions, the smallest being 256x256 pixels at this site: http://jsoc.stanford.edu/data/hmi/images/. 
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/jsoc_dirs-400.png) <br>
 (Fig 10: Directory structure of the hosted HMI vector magnetogram data.)
-
 
 ### Data scraping
 To recursively parse the directory structure and download images, `wget` can be a useful tool, i.e.
@@ -173,9 +171,9 @@ While this works fine, it is very slow for a large number of files (order of 10 
 A better solution is to use the `asyncio` library and Python 3. A list is generated which contains all the urls that we are interested in, and this list is chopped up into (200) multiple chunks. Each chunk is then processed asynchronously yielding all the files we expect in approximately 1 hour.
 
 ### Data preparation
-Initially we have 256x256=65536 pixels in our image that could potentially be features. The first thing to do is to create a mask which the pixels that selects only the solar disc and then flatten the array. This reduces the number of pixels to 42981. Each pixels is greyscale and therefore can take one of 256 values.
+Initially we have 256x256=65536 pixels in our image that could potentially be features. The first thing to do is to create a mask that selects only pixels in the solar disc and then flatten the array. This reduces the number of pixels to 42981. Each pixels is greyscale and therefore can take one of 256 values.
 
-The CME catalogue information in `cme_catalogue.md` is used to classify each image as either a '1' if the image timestamp indicates that it occurs directly before a CME, or a '0' otherwise. The images are only available from 2010-2013 and so we have 126144 images total, of which 2794 are 'pre-CME' frames with target set to '1'.
+The CME catalogue information in `cme_catalogue.md` is used to classify each image as either a '1' if the image timestamp indicates that it occurs directly before a CME, or a '0' otherwise. The images are only available from 2010-2013 and so we have 126144 images total, of which 2794 are 'pre-CME' frames with the target set to '1'.
 
 An additional array the same dimension as the number of images 'time_since' is also calculated which records the number of frames since the last CME. In Part 1 of the project, information relating to previous CME activity turned out to be strong predictors of future CMEs.
 
@@ -185,7 +183,7 @@ Clearly the dimensionality is very large and we have limited target information.
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/pca_cum_var_explained_1000.png) <br>
 (Fig 11: Cumulative explained variance ratios for up to 1000 PCA components.)
 
-Figure 11 shows the total explained variance if we were to choose up to 1000 principal components. The strategy is normally to choose the number of components that corresponds to just after the steepest gradients on this curve i.e. around 100 components. However, the values on the y-axis show that we are only capturing a very small amount of the variance.
+Figure 11 shows the total explained variance if we were to choose up to 1000 principal components. The strategy is normally to choose the number of components that corresponds to just after the steepest gradient on this curve i.e., at around 100 components. However, the values on the y-axis show that we are only capturing a very small amount of the variance.
 
 Nonetheless, if we push on and reduce our dimensionality to now 126144x100 we can now at least attempt classification. The classifier used will be the Multinomial Naiive Bayes and the metric we are primarily interested in is the Area Under the Curve (AUC). The initial results are below:
 ```
@@ -207,9 +205,9 @@ avg / total       0.96      0.98      0.97     37844
 
 Area Under Curve train: 0.499933781717
 Area Under Curve test: 0.501707506084
-Area Under Curve average: 0.500820643901
+**Area Under Curve average:** 0.500820643901
 ```
-An average AUC of 0.5 indicates that the classifier is no better than random chance. If we now add in the additional feature 'time_since' which records the number of frames since the last CME the classifier performs better than before but still poorly:
+An average AUC of 0.5 indicates that the classifier is no better than random chance. If we now add in the additional feature 'time_since' which records the number of frames since the last CME the classifier performs better than before, but still poorly:
 ```
 R^2 train: 0.659943374858
 R^2 test: 0.663169855195
@@ -229,7 +227,7 @@ avg / total       0.96      0.66      0.78     37844
 
 Area Under Curve train: 0.569851588204
 Area Under Curve test: 0.561822556275
-Area Under Curve average: 0.56583707224
+**Area Under Curve average:** 0.56583707224
 ```
 
 ### PCA Discussion
@@ -238,7 +236,7 @@ The improvement in the classifier is almost entirely due to the 'time_since' fea
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/pca_cum_var_explained_1000_single_month.png) <br>
 (Fig 12: Cumulative explained variance ratios for up to 1000 PCA components for one solar rotation only.)
 
-Figures 13-14 show how different the sun appears for two different solar rotations - one in May 2010 closer to solar minimum, and one in December 2013 closer to solar maximum. There is far more structure in the magnetic fields as the sun approaches solar maximum.
+Figures 13-14 show how different the 'Eigensuns' appears for two different solar rotations - one in May 2010 closer to solar minimum, and one in December 2013 closer to solar maximum. There is far more structure in the magnetic fields as the sun approaches solar maximum.
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/may_2010.png) <br>
 (Fig 13: First 16 Eigensuns from PCA computed for the solar rotation in May 2010.)
@@ -249,13 +247,13 @@ Figures 13-14 show how different the sun appears for two different solar rotatio
 ### Dimensionality reduction 2 - Image similarity
 One may ask if there is anything measurably different about the state of the sun before a CME compared to a quiet state of the sun. A quiet state here is defined as an image frame that occurs at the half-way point between 2 consecuative pre-CMEs images - this separation may be anywhere from 15 mins to many hours. PCA is applied to all the images forming the 'quiet' sun state and the 'pre-CME' state, and the Eigensuns are plotted in Figures 15-16.
 
- ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/quiet.png) <br>
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/quiet.png) <br>
 (Fig 15: First 16 Eigensuns from PCA computed for the sun in a 'quiet' state.)
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/cmes.png) <br>
 (Fig 16: First 16 Eigensuns from PCA computed for the sun in a 'pre-CME' state.)
 
-For each image in our dataset we can compute the correlation between the image and each of these Eigensuns representing the 'pre-CME' state and the 'quiet' state. This gives us addtional features that indicate whether the present image is more like a 'quiet' sun or a 'pre-CME' sun. Due to computational constrains only 10 Eigensuns are used and the use of a correlation measure is chosen over the Self-Similarity Image Index. After adding in these additional features the Multinomial Naiive Bayes classifier is attempted again.
+For each image in our dataset we can compute the correlation between the image and each of these Eigensuns representing the 'pre-CME' state and the 'quiet' state. This gives us additional features that indicate whether the present image is more like a 'quiet' sun or a 'pre-CME' sun. Due to computational constrains only 10 Eigensuns are used and the use of a correlation measure is chosen over the Self-Similarity Image Index. After adding in these additional features the Multinomial Naiive Bayes classifier is attempted again.
 ```
 R^2 train: 0.688482446206
 R^2 test: 0.688748546665
@@ -275,12 +273,12 @@ avg / total       0.96      0.69      0.80     37844
 
 Area Under Curve train: 0.581466741011
 Area Under Curve test: 0.587151522923
-Area Under Curve average: 0.584309131967
+**Area Under Curve average:** 0.584309131967
 ```
 This shows another improvement in the classifiers accuracy. Future work should include expanding the number of Eigensuns for which this similarity index is calculated, revisiting the classification of the 'quiet' sun state by ensuring a longer time period between CME events', and the use of the Self-Similarity Image Index which is slower to compute but possibly more accurate.
 
 ### Dimensionality reduction 3 - Greyscale count
-The last lower dimensional feature implemented is a simple binning count of the number of pixels per image. This adds another 256 features to our dataset which with the previous features now has dimensions of 126144x523. The results are now further improved to:
+The last lower dimensional feature implemented is a simple binning count of the number of different grey-level pixels per image. This adds another 256 features to our dataset which with the previous features now gives us dimensions of 126144x523. The results are now further improved to:
 ```
 R^2 train: 0.672718006795
 R^2 test: 0.671757742311
@@ -304,7 +302,7 @@ Area Under Curve average: 0.604987934737
 ```
 
 ## Conclusion
-This project to predict CMEs was ambitious, especially to the accuracy of within 15 mins as in the vector magnetograms in Part 2. In Part 1, much better results were obtained when trying to predict on the time scale of a month, but this was at the expense of reducing the dataset considerable. With the right image analysis in Part 2, the classification does start to show some promise. Overall, however, the ability to accurately predict the onset of a CME from the 256x256 vector magnetogram was poor. This might be expected from simply considering the resolution of the data used. Figures 17-18 shows the difference between the magnetograms used in this project and the high resolution data available. 
+This project to predict CMEs was ambitious, especially to the accuracy of within 15-30 mins as in the vector magnetograms in Part 2. In Part 1, much better results were obtained when trying to predict on the time scale of a month, but this was at the expense of reducing the dataset considerable. With the right image analysis in Part 2, the classification does start to show some promise. Overall, however, the ability to accurately predict the onset of a CME from the 256x256 vector magnetogram was poor. This might be expected from simply considering the resolution of the data used. Figures 17-18 shows the difference between the magnetograms used in this project and the high resolution data available. 
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/20100501_000000_M_256-385.jpg) <br>
 (Fig 17: 256x256 vector magnetogram image.)
@@ -312,4 +310,4 @@ This project to predict CMEs was ambitious, especially to the accuracy of within
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/20100501_000000_M_4k-682.jpg) <br>
 (Fig 18: 4096x4096 vector magnetogram image.)
 
-It is likely that required magnetic field configuration information exists on length scales that only the high resolution magnetograms would capture. However, using this data would mean an even high data dimensionality of the order of 16 million features per image. There are only 2800 or so CMEs to study between 2010-2013, and so this system becomes severely underdetermined. With clever image analysis and the further addition of the data up to the present day in 2014 (an active year for CMEs so far), hopefully our predictive capabilities will further improve.
+It is likely that required magnetic field configuration information exists on length scales that only the high resolution magnetograms would capture. However, using this data would mean even higher dimensional data, of the order of 16 million features per image. There are only 2800 or so CMEs to study between 2010-2013, and so this system becomes severely underdetermined. With clever image analysis and the further addition of the data up to the present day in 2014 (an active year for CMEs so far), hopefully our predictive capabilities will further improve.
