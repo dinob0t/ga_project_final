@@ -151,6 +151,10 @@ MAPE test: 173.152010099
 (Fig 9: Sunspots vs CME numbers per month (blue - data, red - predicted))
 
 ### Discussion
+The ability of the Random Forest to predict the number of CMEs the next day is poor. It is only able to classify a small percentage of between 0-3 CMEs total per day and misses the classification of the 4-14 CMEs total per day category. What is interesting is the feature importance of the classifier which indicates that many of the predictive features are associated with the CMEs occurring the day before (i.e. CME linear speeds, number of CMEs, hour of CME events, etc.) The other important features are the irradiance and radio flux, but due to the high correlation of these features with sunspot area and sunspot number, it is likely that these could be equally substituted.
+
+The ability of the Ridge Regressor to predict the monthly CME number is better than the day to day prediction above. Unfortunately the R^2 and MAPE values of the test and training sets indicates an over-fitting problem which can not be easily rectified. Because the data is now grouped by month, there is only 203 rows representing the data from 1997-2013. This makes the regularisation of the Ridge Regressor essential, but there simply isn't enough data yet to do much better.
+
 
 
 ## Part 2 - Vector magnetogram analysis
@@ -228,84 +232,84 @@ Area Under Curve test: 0.561822556275
 Area Under Curve average: 0.56583707224
 ```
 
-### Discussion
+### PCA Discussion
 The improvement in the classifier is almost entirely due to the 'time_since' feature. Whilst there is no guarantee that we would have done better if the original dimensionality was somehow all retained, it appears that the PCA was ineffective. This is due to the small amount of variance that is explained by our 100 components as in Fig 11. It appears that there is just too much variance in the base features of the sun over several years of data in order to reduce it to a subset of principal components. For example, if we attempted to reduce only one solar rotation (~27 days) to 100 components, we capture much more of the variance (Fig 12).
 
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/pca_cum_var_explained_1000_single_month.png) <br>
 (Fig 12: Cumulative explained variance ratios for up to 1000 PCA components for one solar rotation only.)
 
+Figures 13-14 show how different the sun appears for two different solar rotations - one in May 2010 closer to solar minimum, and one in December 2013 closer to solar maximum. There is far more structure in the magnetic fields as the sun approaches solar maximum.
 
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/may_2010.png) <br>
+(Fig 13: First 16 Eigensuns from PCA computed for the solar rotation in May 2010.)
 
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/december_2013.png) <br>
+(Fig 14: First 16 Eigensuns from PCA computed for the solar rotation in December 2013.)
 
+### Dimensionality reduction 2 - Image similarity
+One may ask if there is anything measurably different about the state of the sun before a CME compared to a quiet state of the sun. A quiet state here is defined as an image frame that occurs at the half-way point between 2 consecuative pre-CMEs images - this separation may be anywhere from 15 mins to many hours. PCA is applied to all the images forming the 'quiet' sun state and the 'pre-CME' state, and the Eigensuns are plotted in Figures 15-16.
 
-### Dimensionality reduction - PCA
+ ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/quiet.png) <br>
+(Fig 15: First 16 Eigensuns from PCA computed for the sun in a 'quiet' state.)
 
-### Dimensionality reduction - PCA
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/cmes.png) <br>
+(Fig 16: First 16 Eigensuns from PCA computed for the sun in a 'pre-CME' state.)
 
-### Target
+For each image in our dataset we can compute the correlation between the image and each of these Eigensuns representing the 'pre-CME' state and the 'quiet' state. This gives us addtional features that indicate whether the present image is more like a 'quiet' sun or a 'pre-CME' sun. Due to computational constrains only 10 Eigensuns are used and the use of a correlation measure is chosen over the Self-Similarity Image Index. After adding in these additional features the Multinomial Naiive Bayes classifier is attempted again.
+```
+R^2 train: 0.688482446206
+R^2 test: 0.688748546665
+             precision    recall  f1-score   support
 
+          0       0.98      0.69      0.81     86321
+          1       0.03      0.47      0.06      1979
 
+avg / total       0.96      0.69      0.80     88300
 
-### Results
+             precision    recall  f1-score   support
 
-### Discussion
+          0       0.98      0.69      0.81     37029
+          1       0.03      0.48      0.06       815
+
+avg / total       0.96      0.69      0.80     37844
+
+Area Under Curve train: 0.581466741011
+Area Under Curve test: 0.587151522923
+Area Under Curve average: 0.584309131967
+```
+This shows another improvement in the classifiers accuracy. Future work should include expanding the number of Eigensuns for which this similarity index is calculated, revisiting the classification of the 'quiet' sun state by ensuring a longer time period between CME events', and the use of the Self-Similarity Image Index which is slower to compute but possibly more accurate.
+
+### Dimensionality reduction 3 - Greyscale count
+The last lower dimensional feature implemented is a simple binning count of the number of pixels per image. This adds another 256 features to our dataset which with the previous features now has dimensions of 126144x523. The results are now further improved to:
+```
+R^2 train: 0.672718006795
+R^2 test: 0.671757742311
+             precision    recall  f1-score   support
+
+          0       0.98      0.68      0.80     86368
+          1       0.04      0.53      0.07      1932
+
+avg / total       0.96      0.67      0.79     88300
+
+             precision    recall  f1-score   support
+
+          0       0.98      0.67      0.80     36982
+          1       0.04      0.54      0.07       862
+
+avg / total       0.96      0.67      0.78     37844
+
+Area Under Curve train: 0.601700331654
+Area Under Curve test: 0.60827553782
+Area Under Curve average: 0.604987934737
+```
 
 ## Conclusion
+This project to predict CMEs was ambitious, especially to the accuracy of within 15 mins as in the vector magnetograms in Part 2. In Part 1, much better results were obtained when trying to predict on the time scale of a month, but this was at the expense of reducing the dataset considerable. With the right image analysis in Part 2, the classification does start to show some promise. Overall, however, the ability to accurately predict the onset of a CME from the 256x256 vector magnetogram was poor. This might be expected from simply considering the resolution of the data used. Figures 17-18 shows the difference between the magnetograms used in this project and the high resolution data available. 
 
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/20100501_000000_M_256-385.jpg) <br>
+(Fig 17: 256x256 vector magnetogram image.)
 
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/20100501_000000_M_4k-385.jpg) <br>
+(Fig 18: 4096x4096 vector magnetogram image.)
 
-
-
-Original dimensionality / all data / no time_since
-0.641176799121
-0.425937394356
-
-Reduce dimensionality to 100 / all data / no time_since
-0.500161009592
-0.499918964912
-Reduce dimensionality to 100 / all data / time_since
-0.568281704901
-0.565537872349
-Reduce dimensionality to 100 / both data / no time_since
-0.500259467213
-0.5
-Reduce dimensionality to 100 / both data / time_since
-0.61490019672
-0.615946052001
-
-SSIM / all data / no time_since
-0.5
-0.5
-SSIM / all data / time_since
-0.529790037914
-0.532229086478
-
-SSIM / both data / no time_since
-0.65747489485
-0.671255472966
-SSIM / both data / time_since
-0.592279662576
-0.595695772371
-
-
-RF - SSIM / both / time_since
-0.726747974389
-0.725100209575
-RF - SSIM / both / no_time_since
-0.710660681846
-0.706026340431
-
-sun_disc_bin_count / all data /  no time_since
-0.53994641115
-0.538337877738
-
-sun_disc_bin_count / all data /  time_since
-0.586106075217
-0.58420156092
-
-sun_disc_bin_count + ssim / all data /  time_since
-0.592799779234
-0.592754552035
-
-
-
+It is likely that required magnetic field configuration information exists on length scales that only the high resolution magnetograms would capture. However, using this data would mean an even high data dimensionality of the order of 16 million features per image. There are only 2800 or so CMEs to study between 2010-2013, and so this system becomes severely underdetermined. With clever image analysis and the further addition of the data up to the present day in 2014 (an active year for CMEs so far), hopefully our predictive capabilities will further improve.
