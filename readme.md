@@ -66,13 +66,13 @@ The information required to predict the number of CMEs on a particular day is li
 
 ### Attempted target
 
-1. Predict the number of CMEs tomorrow based on the information for today
+1. Predict the number of CMEs tomorrow based on the information for today. Fig 6 shows 
 
-![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_10.7.png)<br>
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/correlation_cme_ssn_daily.png)<br>
 (Fig 6: Showing correlation between sunspot number and cme number per day)
 
 2. Predict the number of CMEs next month based on the information for this month (1 month is approximately 1 solar cycle)
-![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_10.7.png)<br>
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/correlation_cme_ssn_monthly.png)</br><br>
 (Fig 7: Showing correlation between sunspot number and cme number per month))
 
 ### Classifiers
@@ -147,7 +147,7 @@ R^2 test: 0.507888792648
 MAPE train: 129.544504755
 MAPE test: 173.152010099
 ```
-![alt text](https://github.com/dinob0t/ga_project_final/blob/master/prediction_cmes_vs_ssn_monthly.png)<br>
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/prediction_cmes_vs_ssn_monthly.png) </br> <br>
 (Fig 9: Sunspots vs CME numbers per month (blue - data, red - predicted))
 
 ### Discussion
