@@ -309,7 +309,7 @@ This project to predict CMEs was ambitious, especially to the accuracy of within
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/20100501_000000_M_256-385.jpg) <br>
 (Fig 17: 256x256 vector magnetogram image.)
 
-![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/20100501_000000_M_4k-385.jpg) <br>
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/slides.key/Data/20100501_000000_M_4k-682.jpg) <br>
 (Fig 18: 4096x4096 vector magnetogram image.)
 
 It is likely that required magnetic field configuration information exists on length scales that only the high resolution magnetograms would capture. However, using this data would mean an even high data dimensionality of the order of 16 million features per image. There are only 2800 or so CMEs to study between 2010-2013, and so this system becomes severely underdetermined. With clever image analysis and the further addition of the data up to the present day in 2014 (an active year for CMEs so far), hopefully our predictive capabilities will further improve.
