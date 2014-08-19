@@ -38,13 +38,13 @@ Because of the strong association of CMEs and the solar magnetic field configura
 (Fig 2: Mean CMEs per month grouped by year)
 2. The area of the solar disc covered by sun spots
 ![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_ssa.png)
-(Fig 3: Mean CMEs per month grouped by year)
+(Fig 3: Mean area of solar disc covered per month grouped by year)
 3. The solar irradiance 
-![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_cmes.png)
-(Fig 4: Mean CMEs per month grouped by year)
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_lyman.png)
+(Fig 4: Mean solar irradiance grouped by year)
 4. The solar radio flux
-![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_cmes.png)
-(Fig 5: Mean CMEs per month grouped by year)
+![alt text](https://github.com/dinob0t/ga_project_final/blob/master/monthly_mean_F10.7.png)
+(Fig 5: Mean F10.7 radio emission by year)
 
 
 
@@ -90,6 +90,18 @@ RF - SSIM / both / time_since
 RF - SSIM / both / no_time_since
 0.710660681846
 0.706026340431
+
+sun_disc_bin_count / all data /  no time_since
+0.53994641115
+0.538337877738
+
+sun_disc_bin_count / all data /  time_since
+0.586106075217
+0.58420156092
+
+sun_disc_bin_count + ssim / all data /  time_since
+0.592799779234
+0.592754552035
 
 
 
