@@ -13,6 +13,8 @@ def generate_url_list(base_url, year_start):
     month_start = 1
     if year == 2010:
       month_start = 5
+    if year == 2012:
+      month_start = 12
     for month in range(month_start,13):
       month_str = str(month)
       if month<10:
@@ -29,7 +31,7 @@ def generate_url_list(base_url, year_start):
             hour_str = '0'+ hour_str        
 
           for minute_str in ['0000', '1500', '3000', '4500']:
-            file_str = year_str + month_str + day_str + '_' + hour_str + minute_str + '_M_256.jpg'
+            file_str = year_str + month_str + day_str + '_' + hour_str + minute_str + '_M_512.jpg'
             file_list.append(file_str)
             url_list.append(base_url + year_str + '/' + month_str + '/' + day_str + '/' +  file_str)
   return url_list, file_list
@@ -40,7 +42,7 @@ def save_to_file(img, file_name):
   # file_name = file_list[file_idx]
   print(type(file_name))
   print("printing file name: " + file_name)
-  f = open('./data/all_256/' + file_name,'wb')
+  f = open('./data/all_512/' + file_name,'wb')
   f.write(img)
   f.close()
 
@@ -78,7 +80,7 @@ def process_batch_of_urls(urls, file_names):
 def process_all():
   print('### Started ###')
   start_time = time.time()
-  url_list, file_list = generate_url_list('http://jsoc.stanford.edu/data/hmi/images/', 2010)
+  url_list, file_list = generate_url_list('http://jsoc.stanford.edu/data/hmi/images/', 2012)
 
   pool_size = 200
   url_chunks=[url_list[x:x+pool_size] for x in range(0, len(url_list), pool_size)]
